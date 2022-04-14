@@ -8,30 +8,41 @@ using namespace std;
 template<typename T>
 unsigned min_index(const vector<T> &vals, unsigned index) {
     unsigned int min = index;
-    for (unsigned int i = index; i < vals.size(); i++) {
-        if (vals.at(i) < vals.at(min)) {
-            min = i;
+    
+    if(vals.size() > 0)
+    {
+        for (unsigned int i = index; i < vals.size(); i++) {
+            if (vals.at(i) < vals.at(min)) {
+                min = i;
+            }
         }
+        return min;
     }
-    return min;
+    
+    return -1;
 }
 
 template<typename T>
 void selection_sort(vector<T> &vals) {
-    int i, j, first, sz = vals.size();
-    for (i = sz-1; i > 0; i--) {
-        first = 0;
-        for (j = 1; j <= i; j++) {
-            if (vals.at(j) > vals.at(first)) {
-                first = j;
-            }
+    if (vals.size() > 0)
+    {
+        for (unsigned i = 0; i < vals.size(); i++)
+        {
+            unsigned minIndex = min_index(vals, i);
+            T tempVal = vals.at(minIndex);
+
+            vals.at(minIndex) = vals.at(i);
+            vals.at(i) = tempVal;
         }
-        swap(vals.at(first), vals.at(i));
     }
 }
 
 template<typename T>
 T getElement(vector<T> vals, int index) {
+    if(index < 0 || index > vals.size() - 1)
+    {
+        throw runtime_error("std::out_of_range");
+    }
     return vals.at(index);
 }
 
@@ -62,8 +73,8 @@ int main(){
         cout << "Element located at " << index << ": is " << curChar << endl;
         }
     }
-    catch (out_of_range& excpt) {
-        cout << "Out of range exception occurred." << endl;
+    catch (runtime_error& excpt) {
+        cout << excpt.what() << " exception occurred." << endl;
     }
     return 0;
 }
